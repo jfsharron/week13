@@ -3,7 +3,11 @@ import csv
 import boto3
 import configparser
 import psycopg2
+from airflow import DAG
+from airflow.operators.bash_operator \
+    import BashOperator
 
+dag = DAG(
 # get the MySQL connection info and connect
 parser = configparser.ConfigParser()
 parser.read("pipeline.conf")
@@ -64,3 +68,5 @@ s3.upload_file(
     local_filename,
     bucket_name,
     s3_file)
+)
+
