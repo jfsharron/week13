@@ -4,10 +4,15 @@ import boto3
 import configparser
 import psycopg2
 from airflow import DAG
-from airflow.operators.bash_operator \
-    import BashOperator
+from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
+from airflow.operators.dummy_operator import DummyOperator
+from kubernetes.client import models as k8s
 
 dag = DAG(
+    'extract MySQL records'
+    description='extract all records rom Orders table'
+)
+
 # get the MySQL connection info and connect
 parser = configparser.ConfigParser()
 parser.read("pipeline.conf")
@@ -68,5 +73,6 @@ s3.upload_file(
     local_filename,
     bucket_name,
     s3_file)
-)
+
+
 
